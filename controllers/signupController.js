@@ -16,14 +16,18 @@ exports.signup = async (req, res) => {
             return res.status(400).json({msg: 'Email already exist'});
         }
         user = req.body;
-        user.password = bcryptjs.hashSync(password,process.env.SALT);
-        await User.create(user)
-
+        user.password = bcryptjs.hashSync(password,10);
+        const newUser = await User.collection.insertOne({...user,created_at:Date.now(),updated_at:Date.now()})
+        const {_id , username } = newUser.ops[0]
+        //console.log(newUser);
         const payload = {
             user: {
-                id: user.id
+                id: _id,
+                username: username,
+                email : email
             }
         }
+        console.log(payload);
 
         jwt.sign(payload, process.env.SECRETKEY,{
             expiresIn: 31536000 // 1 Year
