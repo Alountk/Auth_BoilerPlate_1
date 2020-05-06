@@ -16,7 +16,8 @@ exports.signup = async (req, res) => {
             return res.status(400).json({msg: 'Email already exist'});
         }
         user = req.body;
-        user.password = bcryptjs.hashSync(password,10);
+        const salt = bcryptjs.genSalt(10);
+        user.password = bcryptjs.hash(password,salt);
         const newUser = await User.collection.insertOne({...user,created_at:Date.now(),updated_at:Date.now()})
         const {_id , username } = newUser.ops[0]
         //console.log(newUser);

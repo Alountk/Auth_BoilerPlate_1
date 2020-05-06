@@ -12,6 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/signup", require("./routes/signup"));
+app.use("/api/auth", require("./routes/auth"));
 connectDB();
 
 app.listen(port, "0.0.0.0", () => {
