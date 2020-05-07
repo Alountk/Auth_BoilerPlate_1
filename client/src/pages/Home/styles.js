@@ -1,0 +1,1 @@
+import syled from 'styled-components';
