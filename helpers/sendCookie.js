@@ -3,5 +3,5 @@ module.exports = (res, token) => {
     maxAge: 43200000,
     httpOnly: true,
     secure: false
-  }).status(200).json('OK')
+  }).status(200).json('All OK')
 }

@@ -73,6 +73,7 @@ exports.edit = async (req, res) => {
       username,
       email,
       password: hashPassword,
+      updated_at: Date.now()
 		});
 		const payload = { id, username, email };
     sendCookie(res,signToken(payload));
