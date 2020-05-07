@@ -1,31 +1,95 @@
-const User = require('./../models/User');
-const bcryptjs = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const { validationResult } = require('express-validator');
+const bcryptjs = require("bcryptjs");
+const { validationResult } = require("express-validator");
+const User = require("./../models/User");
+const signToken = require("./../helpers/signToken");
 
+exports.login = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
 
-exports.login = async (req,res) => {
-    console.log('estoy  en login');
-    const errors = validationResult(req);
-    if(!errors.isEmpty()){
-        return res.status(400).json({erros: errors.array()})
-    }
+  const { email, password } = req.body;
 
-    const {email, password} =req.body;
+  try {
+    let user = await User.findOne({ email });
+    if (!user)
+      return res.status(400).json({ msg: "Email or password not valid" });
 
-    try {
-        let user = await User.findOne({email});
-        if (!user) return res.status(400).json({msg: 'Email or Password is not valid!'});
+    const checkPassword = await bcryptjs.compare(password, user.password);
+    if (!checkPassword)
+      return res.status(400).json({ msg: "Email or password not valid" });
 
-        const checkPassword = bcryptjs.compare(password, user.password);
-        if (!checkPassword) return res.status(400).json({msg: 'Email or Password is not valid!'});
+    const payload = { token: { id: user._id, username: user.username, email } };
 
-        console.log(user);
+    res.json(signToken(payload));
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ msg: "Server error" });
+  }
+};
 
-        const payload = { user: {id: _id, username, email} }
+exports.me = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
 
-    } catch (e) {
-        console.log(e);        
-    }
+  try {
+    const user = await User.findOne({ email: req.body.token.email }).select(
+      "-password"
+    );
+    const payload = {
+      token: { id: user._id, username: user.username, email: user.email },
+    };
+    res.json(signToken(payload));
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ msg: "Server error" });
+  }
+};
 
-}
+exports.edit = async (req, res) => {
+	const { username, oldPassword, email, password } = req.body;
+	const { id } = req.body.token;
+  try {
+    if (email !== req.body.token.email) {
+      const checkEmail = await User.findOne({ email });
+      if (checkEmail) return res.status(400).json({ msg: "Email not valid" });
+		}
+
+		const userData = await User.findById(id);
+		const checkPassword = await bcryptjs.compare(oldPassword, userData.password);
+		if (!checkPassword) return res.status(400).json({ msg: "Password incorrect" });
+
+    const salt = await bcryptjs.genSalt(10);
+		const hashPassword = await bcryptjs.hash(password, salt);
+		await User.findByIdAndUpdate(id, {
+      username,
+      email,
+      password: hashPassword,
+		});
+		const payload = {
+      token: { id, username, email },
+    };
+    res.json(signToken(payload));
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ msg: "Server error" });
+  }
+};
+
+exports.delete = async (req, res) => {
+	const { id } = req.body.token;
+	try {
+		const userData = await User.findById(id);
+		if (!req.body.password) return res.status(400).json({ msg: "Password empty" });
+		const checkPassword = await bcryptjs.compare(req.body.password, userData.password);
+		if (!checkPassword) return res.status(400).json({ msg: "Password incorrect" });
+    await User.findByIdAndRemove(id);
+    res.json({ msg: "User deleted" });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ msg: "Server error" });
+  }
+};
