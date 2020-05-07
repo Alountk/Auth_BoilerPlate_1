@@ -5,7 +5,7 @@ const defaultConfig = {
   trim: true,
 };
 const userSchema = mongoose.Schema({
-  username: defaultConfig,
+  username: { ...defaultConfig, unique: true },
   email: { ...defaultConfig, unique: true },
   password: defaultConfig,
   created_at: { type: Date, default: Date.now() },
