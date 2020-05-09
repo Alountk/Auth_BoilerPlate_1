@@ -1,55 +1,40 @@
-import React, { useRef } from "react";
-import { useForm } from "react-hook-form";
-import { Form } from "./styles";
-import { Email } from "./../../components/Auth/Email";
-import { Username } from "../../components/Auth/Username";
-import { Password } from "../../components/Auth/Password";
-import { RepeatPassword } from "../../components/Auth/RepeatPassword";
-
-export function Signup() {
-  const { register, handleSubmit, errors, watch } = useForm();
-  const password = useRef({});
-  password.current = watch("Password", "");
-  const onSubmit = (data) => console.log(data);
-  console.log(errors);
-
-  return (
-    <>
-      <Form onSubmit={handleSubmit(onSubmit)} autoComplete={"off"}>
-        <Email register={register} errors={errors} />
-        <Username register={register} errors={errors} />
-        <Password register={register} errors={errors} />
-        <RepeatPassword
-          password={password}
-          register={register}
-          errors={errors}
-        />
-        <input type="submit" />
-      </Form>
-    </>
-  );
-}  
-import React, { useRef } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Form } from "./styles";
 import { Email } from "../../components/Auth/Email";
 import { Username } from "../../components/Auth/Username";
 import { Password } from "../../components/Auth/Password";
 import { RepeatPassword } from "../../components/Auth/RepeatPassword";
-import { signup } from "./../../api/auth.api";
+import { useAuthContext } from "./../../context/auth/authContext";
+import { signup } from "../../api/auth.api";
+import {
+  setUserAction,
+  setUserActionError,
+} from "./../../context/auth/authActions";
 
-export function Signup() {
+
+export const Signup = () => {
+  const [error, setError] = useState(false);
   const { register, handleSubmit, errors, watch } = useForm();
+  const [{ msg }, dispatch] = useAuthContext();
   const password = useRef({});
   password.current = watch("password", "");
+
   const onSubmit = (data) => {
     const { username, email, password } = data;
-    signup({ username, email, password }).then(response => console.log(response.headers));
+    signup({ username, email, password })
+      .then((res) => dispatch(setUserAction(res)))
+      .catch((e) => dispatch(setUserActionError(e.response.data.msg)));
   };
+  
+  useEffect(() => {
+    setError(true);
+  }, [msg]);
 
   return (
     <>
       <Form onSubmit={handleSubmit(onSubmit)} autoComplete={"off"}>
+        <div>{error && msg}</div>
         <Email register={register} errors={errors} />
         <Username register={register} errors={errors} />
         <Password register={register} errors={errors} />
