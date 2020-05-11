@@ -10,8 +10,10 @@ router.post("/", authController.login);
 // Private
 router.get("/", auth, authController.me);
 
-router.put("/", checkError(), auth, authController.edit);
+router.put("/", auth, checkError(), authController.edit);
 
 router.delete("/", auth, authController.delete);
+
+router.post("/logout", auth, authController.logout);
 
 module.exports = router;

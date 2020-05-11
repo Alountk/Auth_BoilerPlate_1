@@ -21,6 +21,7 @@ export const Signup = () => {
   password.current = watch("password", "");
 
   const onSubmit = (data) => {
+    console.log(data);
     const { username, email, password } = data;
     signup({ username, email, password })
       .then((res) => dispatch(setUserAction(res)))
