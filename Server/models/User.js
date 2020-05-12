@@ -8,8 +8,8 @@ const userSchema = mongoose.Schema({
   username: defaultConfig,
   email: { ...defaultConfig, unique: true },
   password: defaultConfig,
-  language:defaultConfig,
-  theme:defaultConfig,
+  language:{...defaultConfig, default:'en-En '},
+  theme:{...defaultConfig,  default:'dark'},
   created_at: { type: Date, default: Date.now() },
   updated_at: { type: Date, default: Date.now() },
 });

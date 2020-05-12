@@ -11,6 +11,8 @@ import { submitApi } from "../../helpers/submitApi.js";
 import { signup } from "../../api/auth.api";
 import { useHistory } from "react-router-dom";
 import { useAuthContext } from "./../../context/auth/authContext";
+import {languages, themes } from './../../constants/index'
+import { Select } from "../../components/Auth/Select";
 
 export const Signup = () => {
   const history = useHistory();
@@ -51,6 +53,26 @@ export const Signup = () => {
           register={register}
           errors={errors}
         />
+        <Select 
+          name={'language'}
+          register={register}
+          selects={languages}
+        />
+        <Select 
+          name={'theme'}
+          register={register}
+          selects={themes}
+        />
+        {/* <select name="language" ref ={register({required:true})}>
+          <option value="en-EN">{'<-- Language -->'}</option>
+          <option value="es-ES">Español</option>
+          <option value="en-EN">English</option>
+        </select>
+        <select name="theme" ref ={register({required:true})}>
+          <option value="dark">{'<-- Theme -->'}</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select> */}
         <input type="submit" />
       </Form>
     </>

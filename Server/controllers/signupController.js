@@ -23,7 +23,7 @@ exports.signup = async (req, res) => {
       updated_at: Date.now(),
     });
     const { _id } = userDB.ops[0];
-    const payload = { id: _id, username, email };
+    const payload = { id: _id, username, email, theme, language};
     sendCookie(res, payload);
   } catch (e) {
     console.error(e);

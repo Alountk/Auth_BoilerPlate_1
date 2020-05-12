@@ -7,6 +7,9 @@ export const initialState = {
   email: null,
   msg: null,
   loading: true,
+  theme:"dark",
+  language:"en"
+
 };
 
 export const reducer = (state, action) => {
@@ -18,6 +21,8 @@ export const reducer = (state, action) => {
         id: action.payload.id,
         username: action.payload.username,
         email: action.payload.email,
+        theme:action.payload.theme,
+        language:action.payload.language,
         msg: null,
         loading: false,
       };

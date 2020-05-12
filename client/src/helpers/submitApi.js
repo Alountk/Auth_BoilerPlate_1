@@ -1,11 +1,12 @@
 import swal from "sweetalert";
-import { setUserAction, setLoading } from "../context/auth/authActions";
+import { setUserAction, setLoading, setUserActionError } from "../context/auth/authActions";
 
 export const submitApi = ({ data, api, action, history, dispatch }) => {
   dispatch(setLoading());
   api(data)
     .then((res) => {
       dispatch(setUserAction(res));
+      console.log(res);
       swal("Done!", `${action} success!`, "success", {
         button: false,
         timer: 2900,
@@ -24,5 +25,6 @@ export const submitApi = ({ data, api, action, history, dispatch }) => {
               "error",
               { button: false, timer: 2900 }
             );
+      dispatch(setUserActionError());
     });
 };

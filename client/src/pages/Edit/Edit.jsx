@@ -10,10 +10,12 @@ import { RepeatPassword } from "../../components/Auth/RepeatPassword";
 import { useAuthContext } from "./../../context/auth/authContext";
 import { edit } from "../../api/auth.api";
 import { submitApi } from "../../helpers/submitApi.js";
+import {languages, themes } from './../../constants/index'
+import { Select } from "../../components/Auth/Select";
 
 export const Edit = () => {
   const { register, handleSubmit, errors, watch, setValue } = useForm();
-  const [{ username, email }, dispatch] = useAuthContext();
+  const [{ username, email,  theme, language }, dispatch] = useAuthContext();
   const password = useRef({});
   const history = useHistory();
   password.current = watch("password", "");
@@ -24,7 +26,9 @@ export const Edit = () => {
 
   useEffect(() => {
     setValue("email", email);
-    setValue("username", username);
+    setValue("username", username)
+    setValue('theme', theme);
+    setValue('language', language);
   }, [email, username, setValue]);
 
   return (
@@ -59,6 +63,16 @@ export const Edit = () => {
           password={password}
           register={register}
           errors={errors}
+        />
+        <Select 
+          name={'language'}
+          register={register}
+          selects={languages}
+        />
+        <Select 
+          name={'theme'}
+          register={register}
+          selects={themes}
         />
         <input type="submit" />
       </Form>
