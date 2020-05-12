@@ -1,5 +1,6 @@
   
 import React, { useRef } from "react";
+import {Helmet} from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { Form } from "./styles";
 import { Email } from "../../components/Auth/Email";
@@ -23,6 +24,10 @@ export const Signup = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Signup</title>
+        <meta name="description" content="Signup page." />
+      </Helmet>
       <Form
         onSubmit={handleSubmit(onSubmit)}
         autoComplete={"off"}

@@ -8,7 +8,7 @@ exports.signup = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ msg: errors.array()[0].msg });
   }
-  const { email, password, username } = req.body;
+  const { email, password, username, theme, language } = req.body;
 
   try {
     let user = await User.findOne({ email });

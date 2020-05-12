@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from "react";
+import {Helmet} from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 import { Form } from "./styles";
@@ -28,6 +29,10 @@ export const Edit = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Edit</title>
+        <meta name="description" content="Edit profile page." />
+      </Helmet>
       <Form onSubmit={handleSubmit(onSubmit)} autoComplete={"off"}>
         <Email placeholder="Email" register={register} errors={errors} />
         <Username

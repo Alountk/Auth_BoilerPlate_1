@@ -39,7 +39,6 @@ export const Navbar = React.memo(() => {
   };
 
   const handleNavbar = () => {
-    console.log(navbarState);
     setNavbarState(!navbarState);
   }
 

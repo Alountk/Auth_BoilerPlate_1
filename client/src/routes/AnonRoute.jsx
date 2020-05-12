@@ -5,7 +5,6 @@ import { useAuthContext } from "./../context/auth/authContext";
 
 export const AnonRoute = ({ component: Component, ...rest }) => {
   const [{ logged }] = useAuthContext();
-  console.log('logea?',logged);
   return (
     <Route
       {...rest}

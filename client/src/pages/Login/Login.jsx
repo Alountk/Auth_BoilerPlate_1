@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { Form } from "./styles";
+import {Helmet} from "react-helmet-async";
 import { Email } from "../../components/Auth/Email";
 import { Password } from "../../components/Auth/Password";
 import { login } from "./../../api/auth.api";
@@ -21,6 +22,10 @@ export const Login = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Login</title>
+        <meta name="description" content="Login page." />
+      </Helmet>
       <Form onSubmit={handleSubmit(onSubmit)} autoComplete={"off"}>
         <Email placeholder={"Email"} register={register} errors={errors} />
         <Password
