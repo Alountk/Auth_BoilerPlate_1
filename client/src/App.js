@@ -31,15 +31,7 @@ const App = () => {
     }
     // eslint-disable-next-line
   }, [])
-
-  // useEffect(() => {
-  //   if (!logged) {
-  //     me().then((res) => {if (res.msg !== 'Unauthorized'){dispatch(setUserAction(res))}});
-  //   }
-    // eslint-disable-next-line
-  // }, []);
   
-  //console.log(loading)
   if (loading) return <><Loader color='#158AFF' className='loader' type='ThreeDots'/></>
   return (
     <Router>
